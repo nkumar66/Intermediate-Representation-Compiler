@@ -1,0 +1,16 @@
+# Compiled binaries
+*.out
+*.exe
+*.o
+
+# macOS system files
+__MACOSX/
+.DS_Store
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Build directories
+build/
+bin/ 

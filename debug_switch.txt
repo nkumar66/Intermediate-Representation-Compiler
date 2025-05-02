@@ -1,0 +1,10 @@
+X, Y;
+{
+  input X;
+  SWITCH X {
+    CASE 0: { Y = 100; output Y; }
+    CASE 1: { Y = 200; output Y; }
+    DEFAULT: { Y = 300; output Y; }
+  }
+}
+1
