@@ -1,26 +1,30 @@
-**overview**
+# IR Compiler (CSE340 Project 3)
 
-This compiler project parses a tiny imperative language and then “runs” it by translating everything into a simple intermediate form and interpreting that. it’s all handwritten C++ (no fancy parser generators), so you see exactly how each if, while, for, and even switch statement gets broken down into basic jump instructions.
+A simple compiler/interpreter for a tiny imperative language.  
+It parses your code into an intermediate representation (IR) and then “executes” that IR directly.
 
-**parsing**
+## Overview
 
+1. **Parsing**  
+   - Reads a declaration section (`a, b, c;`)  
+   - Parses a statement block (`{ … }`) containing assignments, control flow (`if`, `while`, `for`, `switch`), and I/O  
+   - Collects input values for `input` statements  
 
-read a list of variable names (e.g. a, b, c;)
+2. **Lowering to IR**  
+   - Builds a linked list of `InstructionNode`s rather than executing the parse tree  
+   - Examples:  
+     - `x = y + z;` → an `ASSIGN` node  
+     - `if x < y { … }` → a `CJMP` (conditional jump) + a `NOOP` label  
+     - `switch` → a chain of “if not equal then skip” `CJMP`s + jumps to a shared exit label  
 
-consume a block of statements { … } that can include assignments, control flow, I/O, etc.
+3. **Execution**  
+   - A tiny runtime walks the IR list  
+   - Maintains a `mem[]` array for variables and constants  
+   - Feeds values from a queue for `IN` nodes and prints for `OUT` nodes  
+   - Follows `CJMP` and `JMP` pointers to control flow  
 
-finally grab a stream of input values to feed input statements
+## Building & Running
 
-**lowering to IR**
-instead of executing the parse tree directly, we build a flat list of InstructionNode objects. for example:
-
-an assignment x = y + z; becomes an ASSIGN node
-
-a comparison and branch (if x < y) turns into a CJMP node plus a NOOP label
-
-switch statements become a short sequence of “if not equal, skip” checks and jumps
-
-**interpreting**
-a tiny runtime walks the IR list, keeps a big mem[] array for all variables/constants, pulls values from the input queue for IN, prints on OUT, and follows the CJMP/JMP pointers to steer execution.
-
-this setup makes it really clear how high‑level constructs map down to plain jumps and labels, which is the heart of how compilers implement control flow under the hood.
+```bash
+g++ -std=c++11 -o proj3 proj3.cc execute.cc lexer.cc inputbuf.cc
+./proj3 < your_program.txt
