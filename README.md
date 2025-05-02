@@ -1,7 +1,9 @@
 **overview**
+
 This compiler project parses a tiny imperative language and then “runs” it by translating everything into a simple intermediate form and interpreting that. it’s all handwritten C++ (no fancy parser generators), so you see exactly how each if, while, for, and even switch statement gets broken down into basic jump instructions.
 
 **parsing**
+
 
 read a list of variable names (e.g. a, b, c;)
 
